@@ -1,14 +1,15 @@
-import React from "react";
-import { ReactNode } from "react";
+import React from 'react';
+import { ReactNode } from 'react';
 
 interface WrapperProps {
-    children: ReactNode;
-    className?: string;
+  children: ReactNode;
+  className?: string;
 }
 
 const Wrapper = ({ children, className }: WrapperProps) => {
-    return (
-        <div className={`mx-auto
+  return (
+    <div
+      className={`mx-auto
             px-5 
             md:px-5 
             lg:px-8 
@@ -19,10 +20,11 @@ const Wrapper = ({ children, className }: WrapperProps) => {
             lg:max-w-[1024px] 
             xl:max-w-[1920px] 
             2xl:max-w-[2560px] 
-            ${className ? className : ''}`}>
-            {children}
-        </div>
-    );
+            ${className ? className : ''}`}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default Wrapper;
