@@ -12,13 +12,13 @@ const navItems = [
 
 export function NavBar() {
   return (
-    <nav className="w-full pb-6">
+    <nav className="w-full p-6">
       <div className="flex items-center justify-center gap-28 2xl:text-4xl">
         {navItems.map((item) => (
           <Link
             href={item.href}
             key={item.href}
-            className="active:text-mainColor"
+            className="text-xl md:text-2xl lg:text-3xl 2xl:text-5xl active:text-mainColor"
           >
             {item.label}
           </Link>

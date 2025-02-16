@@ -4,9 +4,9 @@ const API_BASE_URL = '/api';
 type ApiRequestOptions = {
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 	endpoint: string;
-	data?: Record<string, string>;
-	params?: Record<string, string>;
-	headers?: Record<string, string>;
+	data?: Record<string, unknown>;
+	params?: Record<string, unknown>;
+	headers?: Record<string, unknown>;
 };
 
 export interface IApiService {
@@ -37,7 +37,7 @@ const createApiService = () => {
 
 	const replaceRouteParams = (
 		route: string,
-		params: Record<string, string>
+		params: Record<string, unknown>
 	) => {
 		// Ensure params is defined and has the expected properties
 		if (!params) {
@@ -56,6 +56,7 @@ const createApiService = () => {
 		try {
 			const { method, endpoint, data, params, headers } = options;
 			const replacedEndpoint = replaceRouteParams(endpoint, params || {});
+			
 			const response: AxiosResponse<T> = await api.request({
 				url: replacedEndpoint,
 				method,
@@ -66,14 +67,15 @@ const createApiService = () => {
 				params,
 			});
 
-			// Check if the response status is not in the 2xx range
 			if (response.status < 200 || response.status >= 300) {
-				throw new Error(`Request failed with status code ${response.status}`);
+				throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
 			}
 
 			return response.data;
 		} catch (error) {
-			console.error('API request error:', error);
+			if (axios.isAxiosError(error)) {
+				throw new Error(`API Error: ${error.response?.data?.message || error.message}`);
+			}
 			throw error;
 		}
 	};
