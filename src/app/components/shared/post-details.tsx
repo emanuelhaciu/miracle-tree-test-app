@@ -16,4 +16,4 @@ export default function PostDetails({ post, user }: PostDetailsProps) {
       <p className="text-gray-500">Author: {user.name}</p>
     </div>
   );
-}
+} 

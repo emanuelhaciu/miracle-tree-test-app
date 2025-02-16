@@ -3,11 +3,11 @@ import type {
   GetStaticProps,
   GetStaticPaths,
 } from 'next'
-import { getPostsAction } from '@/app/actions/post-actions';
+import { getPostsAction } from '@/app/actions/post.actions';
 
 import { Post } from '@/app/application/core/models/post';
 import Wrapper from '@/app/components/layout/wrapper';
-import PostAndUserDetails from '@/app/components/routes/post/[id]/post-user-details';
+import PostAndUserDetails from '@/app/components/features/post/[id]/post-user-details';
 
 interface PostPageProps {
   post: Post;
