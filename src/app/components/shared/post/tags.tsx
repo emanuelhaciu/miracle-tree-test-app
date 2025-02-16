@@ -8,6 +8,29 @@ interface PostTagsProps {
     tagClassName?: string;
 }
 
+const tagSets = [
+    'React',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'CSS',
+    'HTML',
+    'Next.js',
+    'GraphQL',
+    'MongoDB',
+    'Redux',
+    'React',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'CSS',
+    'HTML',
+    'Next.js',
+    'GraphQL',
+    'MongoDB',
+    'Redux',
+];
+
 export const PostTags = React.memo(function PostTags({
     tags,
     onTagClick,

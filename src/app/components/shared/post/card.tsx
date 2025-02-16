@@ -19,9 +19,9 @@ export default React.memo(function PostCard({
     return (
         <div
             key={post.id}
-            className={`flex flex-col gap-6 min-h-[400px] p-6 rounded-xl shadow-lg border border-border/5 w-full`}
+            className={`flex flex-col gap-6 p-6 rounded-xl shadow-lg border border-border/5 w-full`}
         >
-            <div className="min-h-[50px] xs:min-h-[100px] md:min-h-[100px] lg:min-h-[100px] xl:min-h-[100px] 2xl:min-h-[125px]">
+            <div className="min-h-[12vh] sm:min-h-[12vh] md:min-h-[12vh] lg:min-h-[12vh] xl:min-h-[10vh] 2xl:min-h-[8vh]">
                 <PostTitle
                     title={post.title}
                     postId={post.id}
@@ -29,22 +29,23 @@ export default React.memo(function PostCard({
                 />
             </div>
             <div className="flex flex-col">
-                <div className="min-h-[80px] xs:min-h-[100px] md:min-h-[100px] lg:min-h-[100px] xl:min-h-[100px] 2xl:min-h-[150px] flex-grow">
+                <div className="pb-4">
                     <PostBody
                         body={post.body}
-                        className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl flex-grow first-letter:uppercase"
+                        className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl first-letter:uppercase"
                     />
                 </div>
+
                 {isReadMore && <PostReadMore postId={post.id} />}
-        </div>
+            </div>
             <div className="flex flex-col">
                 <PostTags
                     tags={post.tags}
                     onTagClick={onTagClick}
-                    containerClassName="flex flex-wrap gap-2"
+                    containerClassName="flex flex-wrap gap-2 justify-between"
                     tagClassName="
                     flex items-center gap-2 py-1 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl bg-blue-600 
-                    text-white rounded-full hover:bg-blue-700 text-mainColor flex-grow"
+                    text-white rounded-full hover:bg-blue-700 text-mainColor"
                 />
             </div>
         </div>
