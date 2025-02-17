@@ -17,6 +17,7 @@ export default {
       mainColor: '#F15A29',
       titleColor: '#2B4C7E',
       bodyColor: '#374151',
+      linkColor: '#B22222',
     },
   },
   plugins: [],

@@ -43,7 +43,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 
 1. Clone the repository
 2. Create .env file in the root directory and add the following variables:
-   - `NEXT_PUBLIC_THIRD_PARTY_URL`
+   - `NEXT_PUBLIC_THIRD_PARTY_API_URL`
 3. Run `npm install` to install the dependencies
 4. Run `npm run dev` to start the development server
 
@@ -51,16 +51,32 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 
 ### Advanced Features
 
-1.  **Static Site Generation (SSG):** The application utilizes Next.js's SSG capabilities (`getStaticProps` and `getStaticPaths`) to pre-render pages at build time. This significantly improves performance and SEO.
+1. **Hybrid Static Generation with ISR:** 
+   - Pre-render first 10 posts at build time using `getStaticPaths` with `paths: generatedPosts.slice(0, 10)`
+   - Implement Incremental Static Regeneration (ISR) with `fallback: 'blocking'` for remaining posts
+   - Auto-revalidate pages every hour (`revalidate: 3600`) for fresh content
+   - User data is fetched at build time via `getPostsAction` (parallel user/post API calls) eliminating client-side fetching
 
-2.  **Tag-Based Filtering:** The implementation of a custom tagging system, including hashtag generation and filtering, provides a user-friendly way to explore content. A dictionary (hash map) is created at build time (`createPostTagMap` and `serializeTagMap` functions) to store post IDs associated with each tag. This allows for O(1) lookup complexity when filtering posts by tag, ensuring efficient filtering even with a large number of posts and tags. The use of a `Set` internally within the `createPostTagMap` function, before serialization, ensures uniqueness of post IDs for each tag. The `usePostFiltering` hook then leverages this pre-built dictionary for filtering.
+2. **Optimized Data Fetching:**
+   - User data is collocated with posts during build (`getPostsAction` maps users to posts)
+   - Removed client-side user fetching hooks (`usePostAndUser`) reducing client-side JavaScript
 
-3.  **Custom Hooks:** The use of custom hooks (`usePostFiltering`, `usePostAndUser`) encapsulates specific logic, promoting code reusability and maintainability.
+3. **Type-Safe API Layer:**
+   - Strong typing throughout the data fetching layer (axios instance with TypeScript generics)
+   - Automatic retry logic (3 attempts) for failed API requests
 
-4.  **Component Reusability:** The project extensively uses reusable components (e.g., `Wrapper`, `Title`, `Body`, `PostCard`, etc.), making the codebase more organized and easier to maintain.
+4. **Performance Optimization:**
+   - Dynamic route segments (`/post/[id]`) only generate when accessed
+   - Smart caching strategy through `revalidate` maintains freshness while reducing build times
 
-5.  **Type Safety:** The entire project is written in TypeScript, providing strong typing and reducing the likelihood of runtime errors.
+5.  **Tag-Based Filtering:** The implementation of a custom tagging system, including hashtag generation and filtering, provides a user-friendly way to explore content. A dictionary (hash map) is created at build time (`createPostTagMap` and `serializeTagMap` functions) to store post IDs associated with each tag. This allows for O(1) lookup complexity when filtering posts by tag, ensuring efficient filtering even with a large number of posts and tags. The use of a `Set` internally within the `createPostTagMap` function, before serialization, ensures uniqueness of post IDs for each tag. The `usePostFiltering` hook then leverages this pre-built dictionary for filtering.
 
-6.  **Responsive Design:** The application uses Tailwind CSS, making it responsive across various screen sizes.
+6.  **Custom Hooks:** The use of custom hooks (`usePostFiltering`, `usePostAndUser`) encapsulates specific logic, promoting code reusability and maintainability.
 
-7.  **Error Handling:** The API service includes error handling for failed requests.
+7.  **Component Reusability:** The project extensively uses reusable components (e.g., `Wrapper`, `Title`, `Body`, `PostCard`, etc.), making the codebase more organized and easier to maintain.
+
+8.  **Type Safety:** The entire project is written in TypeScript, providing strong typing and reducing the likelihood of runtime errors.
+
+9.  **Responsive Design:** The application uses Tailwind CSS, making it responsive across various screen sizes.
+
+10.  **Error Handling:** The API service includes error handling for failed requests.

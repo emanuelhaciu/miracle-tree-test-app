@@ -1,5 +1,4 @@
 import Wrapper from '@/app/components/layout/wrapper';
-import { getPostsAction } from '@/app/actions/post.actions';
 import { Post } from '@/app/application/core/models/post';
 import { GetStaticProps, InferGetStaticPropsType } from 'next/dist/types';
 import PostCards from '@/app/components/features/home/post-cards';
@@ -8,6 +7,7 @@ import {
     serializeTagMap,
     SerializedPostTagMap,
 } from '@/app/utils/post-utils';
+import { getPostsAction } from '@/app/actions/post.actions';
 
 export const getStaticProps = (async () => {
     const posts = await getPostsAction();

@@ -47,7 +47,7 @@ export default function PostCards({ posts, tagMap }: Props) {
                     </div>
                 </div>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
                 {memoizedFilteredPosts.map((post: Post) => (
                     <PostCard
                         key={post.id}

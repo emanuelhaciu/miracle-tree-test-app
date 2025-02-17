@@ -1,16 +1,16 @@
 import { Post } from "@/app/application/core/models/post";
-export type PostTagMap = Map<string, Set<string>>;
-export type SerializedPostTagMap = Record<string, string[]>;
+export type PostTagMap = Map<string, Set<number>>;
+export type SerializedPostTagMap = Record<string, number[]>;
 
 export function createPostTagMap(posts: Post[]): PostTagMap {
-  const tagMap = new Map<string, Set<string>>();
+  const tagMap = new Map<string, Set<number>>();
   
   posts.forEach(post => {
     post.tags.forEach(tag => {
       if (!tagMap.has(tag)) {
         tagMap.set(tag, new Set());
       }
-      tagMap.get(tag)!.add(post.id.toString());
+      tagMap.get(tag)!.add(post.id);
     });
   });
   

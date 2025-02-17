@@ -25,15 +25,13 @@ const createApiService = () => {
 	});
 
 	// Add request interceptors
-	api.interceptors.request.use(
-		(config) => {
-			return config;
-		},
-		(error) => {
-			// Handle request error
-			return Promise.reject(error);
-		}
-	);
+	api.interceptors.request.use(config => {
+		config.headers = config.headers || {}; // Ensure headers exist
+		config.headers['Content-Security-Policy'] = "default-src 'self'";
+		config.headers['X-Content-Type-Options'] = 'nosniff';
+		config.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+		return config;
+	});
 
 	const replaceRouteParams = (
 		route: string,
@@ -53,31 +51,39 @@ const createApiService = () => {
 	};
 
 	const makeApiRequest = async <T>(options: ApiRequestOptions): Promise<T> => {
-		try {
-			const { method, endpoint, data, params, headers } = options;
-			const replacedEndpoint = replaceRouteParams(endpoint, params || {});
-			
-			const response: AxiosResponse<T> = await api.request({
-				url: replacedEndpoint,
-				method,
-				data,
-				headers: {
-					...headers,
-				} as AxiosRequestConfig['headers'],
-				params,
-			});
-
-			if (response.status < 200 || response.status >= 300) {
-				throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
+		const MAX_RETRIES = 3;
+		let retries = 0;
+		
+		while (retries < MAX_RETRIES) {
+			try {
+				const { method, endpoint, data, params, headers } = options;
+				const replacedEndpoint = replaceRouteParams(endpoint, params || {});
+				
+				const response: AxiosResponse<T> = await api.request({
+					url: replacedEndpoint,
+					method,
+					data,
+					headers: {
+						...headers,
+					} as AxiosRequestConfig['headers'],
+					params,
+					timeout: 10000 // Add 10s timeout
+				});
+	
+				return response.data;
+			} catch (error) {
+				if (axios.isAxiosError(error)) {
+					if (error.code === 'EAI_AGAIN' && retries < MAX_RETRIES) {
+						retries++;
+						await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+						continue;
+					}
+					throw new Error(`API Error: ${error.message}`);
+				}
+				throw error;
 			}
-
-			return response.data;
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				throw new Error(`API Error: ${error.response?.data?.message || error.message}`);
-			}
-			throw error;
 		}
+		throw new Error('Max retries exceeded');
 	};
 
 	// Add a .get, .post, etc to makeApiRequest
