@@ -8,11 +8,11 @@ interface PostReadMoreProps {
 
 export const PostReadMore = React.memo(function PostReadMore({
   postId,
-  className = 'text-primary hover:text-mainColor font-medium transition-colors 2xl:text-2xl',
+  className
 }: PostReadMoreProps) {
   return (
-      <Link href={`/post/${postId}`} className={className}>
-        Read More
+      <Link href={`/post/${postId}`}>
+        <p className={className}>Read More</p>
       </Link>
   );
 });

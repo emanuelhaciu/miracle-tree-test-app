@@ -3,7 +3,7 @@ import { Post } from '@/app/application/core/models/post';
 import { SerializedPostTagMap } from '@/app/utils/post-utils';
 
 export function usePostFiltering(posts: Post[], tagMap: SerializedPostTagMap) {
-    const [selectedTag, setSelectedTag] = useState<string[] | null>(null);
+    const [selectedTag, setSelectedTag] = useState<string[] | null>([]);
     const [filteredPosts, setFilteredPosts] = useState(posts);
 
     useEffect(function useSelectedTags() {
@@ -20,7 +20,7 @@ export function usePostFiltering(posts: Post[], tagMap: SerializedPostTagMap) {
             }
 
             const filtered = posts.filter((post) =>
-                matchingPostIds.has(post.id.toString())
+                matchingPostIds.has(post.id)
             );
 
             setFilteredPosts(filtered);

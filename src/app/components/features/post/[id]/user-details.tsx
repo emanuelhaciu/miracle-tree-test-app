@@ -1,23 +1,14 @@
 import Link from 'next/link';
-import { usePostAndUser } from './hooks/usePostAndUser';
-import { Post } from '@/app/application/core/models/post';
+import { User } from '@/app/application/core/models/user';
 
 interface UserDetailsProps {
-    post: Post;
+    user: User;
 }
 
-export default function UserDetails({ post }: UserDetailsProps) {
-    const { user, isLoading, error } = usePostAndUser(post);
+export default function UserDetails({ user }: UserDetailsProps) {
 
     if (!user) {
         return <div>User not found</div>;
-    }
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
     }
 
     return (
